@@ -1,23 +1,38 @@
-import logo from './logo.svg';
+import React,{useEffect,useState} from 'react';
 import './App.css';
 
 function App() {
+  const [docs, setDocs]=useState([]);
+
+  useEffect(()=>{
+    const fetchData = async () =>{
+      await fetch('https://jsonplaceholder.typicode.com/posts/')
+      .then((data)=>(data.json()))
+      .then((data)=>{setDocs(data)})
+      .catch((err)=>(console.log(err)));
+    }
+    fetchData();
+  },[])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>TITLE</th>
+            <th>BODY</th>
+          </tr>
+        </thead>
+        <tbody>
+          {docs.map((value,key)=>{
+            return (<tr key={key}>
+              <td>{value.id}</td>
+              <td>{value.title}</td>
+              <td>{value.body}</td>
+            </tr>);
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }
